@@ -6,13 +6,9 @@ exports[`component <ExpanderRow /> should render correctly 1`] = `
   background-color: transparent;
 }
 
-<tr
+<div
   className="c0"
->
-  <td
-    colSpan={0}
-  />
-</tr>
+/>
 `;
 
 exports[`component <ExpanderRow /> with children should render correctly and have a data prop 1`] = `
@@ -21,24 +17,20 @@ exports[`component <ExpanderRow /> with children should render correctly and hav
   background-color: transparent;
 }
 
-<tr
+<div
   className="c0"
 >
-  <td
-    colSpan={0}
-  >
-    <div
-      data={
-        Object {
-          "name": "morty",
-        }
+  <div
+    data={
+      Object {
+        "name": "morty",
       }
-      key=".0"
-    >
-      Some Expander Content
-    </div>
-  </td>
-</tr>
+    }
+    key=".0"
+  >
+    Some Expander Content
+  </div>
+</div>
 `;
 
 exports[`component <ExpanderRow numColumns /> should render correctly 1`] = `
@@ -47,11 +39,7 @@ exports[`component <ExpanderRow numColumns /> should render correctly 1`] = `
   background-color: transparent;
 }
 
-<tr
+<div
   className="c0"
->
-  <td
-    colSpan={5}
-  />
-</tr>
+/>
 `;

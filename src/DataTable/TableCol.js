@@ -2,57 +2,34 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme, css } from 'styled-components';
 import Checkbox from './Checkbox';
+import { cellMixin } from './mixins';
 
-const TableColStyle = styled.th`
-  box-sizing: border-box;
-  vertical-align: middle;
+const TableColStyle = styled.div`
+  ${() => cellMixin};
+  white-space: nowrap;
   user-select: none;
   font-weight: 500;
-  white-space: nowrap;
   height: ${props => props.theme.header.height};
   font-size: ${props => props.theme.header.fontSize};
   color: ${props => props.theme.header.fontColor};
-  width: ${props => props.width};
-  ${props => props.column.number && 'text-align: right'};
-  ${props => props.column.center && 'text-align: center'};
   ${props => props.sortable && 'cursor: pointer'};
-  padding-left: calc(${props => props.theme.cells.cellPadding} / 2);
-  padding-right: calc(${props => props.theme.cells.cellPadding} / 2);
-
-  &:first-child {
-    padding-left: ${props => props.theme.cells.firstCellPadding};
-    ${props => props.type === 'checkbox' && 'padding-left: 8px'};
-    ${props => props.type === 'checkbox' && 'padding-right: 0'};
-  }
-
-  &:nth-child(2) {
-    /* when compact or expander is not first child (table is selectable) */
-    ${props => props.type !== 'checkbox' && 'padding-left: 8px'};
-  }
-
-  ${props => props.column.compact && 'padding: 0'};
-
-  &:last-child {
-    padding-right: ${props => props.theme.cells.lastCellPadding};
-  }
 
   &::before {
     font-size: 12px;
     padding-right: 4px;
-    padding-bottom: 5px;
   }
 
   /* default sorting when no icon is specified */
   ${props => props.sortable && props.sortDirection === 'asc' && !props.sortIcon &&
     css`
       &::before {
-        content: '\\25BC';
+        content: '\\25B2';
       }
   `};
   ${props => props.sortable && props.sortDirection === 'desc' && !props.sortIcon &&
     css`
       &::before {
-        content: '\\25B2';
+        content: '\\25BC';
       }
   `};
 `;
@@ -72,11 +49,12 @@ const SortIcon = styled.span`
     flex-shrink: 0;
     transition-duration: 0.1s;
     transition-property: transform;
+    transform: rotate(180deg);
   }
 
   &.desc i,
   svg {
-    transform: rotate(180deg);
+    transform: rotate(0);
   }
 `;
 
@@ -87,7 +65,7 @@ class TableCol extends PureComponent {
     sortable: PropTypes.bool,
     sortDirection: PropTypes.oneOf(['asc', 'desc']),
     sortIcon: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
-    type: PropTypes.oneOf(['checkbox', 'column']),
+    type: PropTypes.oneOf(['checkbox', 'expander', 'column']),
     checkboxComponent: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.func,
@@ -96,7 +74,6 @@ class TableCol extends PureComponent {
     checked: PropTypes.bool,
     indeterminate: PropTypes.bool,
     onClick: PropTypes.func,
-    width: PropTypes.string,
   };
 
   static defaultProps = {
@@ -111,7 +88,6 @@ class TableCol extends PureComponent {
     checked: false,
     indeterminate: false,
     onClick: null,
-    width: 'auto',
   };
 
   onColumnClick = e => {
@@ -153,11 +129,13 @@ class TableCol extends PureComponent {
       );
     }
 
+    const direction = sortDirection === 'asc' ? 'asc' : 'desc';
+
     return (
       column.name ?
         <ColumnCellWrapper>
           {sortable && sortIcon &&
-          <SortIcon className={sortDirection === 'asc' ? 'asc' : 'desc'}>
+          <SortIcon className={direction}>
             {sortIcon}
           </SortIcon>}
           {column.name}
@@ -168,7 +146,6 @@ class TableCol extends PureComponent {
   render() {
     const {
       column,
-      width,
       sortable,
       sortIcon,
       sortDirection,
@@ -177,13 +154,19 @@ class TableCol extends PureComponent {
 
     return (
       <TableColStyle
+        type={type}
         onClick={this.onColumnClick}
         sortable={sortable}
         sortDirection={sortDirection}
         sortIcon={sortIcon}
-        type={type}
         column={column}
-        width={width}
+        width={column.width}
+        minWidth={column.minWidth}
+        grow={column.grow}
+        truncate={column.truncate}
+        right={column.right}
+        center={column.center}
+        compact={column.compact}
       >
         {this.renderChildren()}
       </TableColStyle>

@@ -43,17 +43,21 @@ yarn add react-data-table-component
 ### Columns
 Nothing new here - we are using an array of object literals and properties to describle the columns:
 
-| Property | Type   | Required | Example                                                                                                       |
-|----------|--------|----------|---------------------------------------------------------------------------------------------------------------|
-| name     | string | no       | the display name of our Column e.g. 'Name'                                                                    |
-| selector | string | yes      | the propery in the data set e.g.  `property1.nested1.nested2`.                                                 |
-| sortable | bool   | no       | if the column is sortable                                                                                    |
-| number   | bool   | no       | if the field is a number: applies `text-align: right`                                                                |
-| center   | bool   | no       | if the field should be centered: applies `text-align: center`                                                               |
-| compact  | bool   | no       | removes any padding in the cell. useful for custom cells icons or buttons                                                 |
-| format   | func   | no       | format the selector e.g. `row => moment(row.timestamp).format('lll')`                                         |
-| cell     | func   | no       | for ultimate control use `cell` to render your own custom component! e.g `row => <h2>{row.title}</h2>`  **Negates  `format`** |
-| ignoreRowClick   | bool | no | implements e.stopPropagation() on a specific Table Cell. This is **really** useful when you want to trigger some action based on `onRowClicked` and when you do not want the Table Cell to trigger `onRowClicked`
+| Property | Type   | Required | Default | Description                                                                                                    |
+|----------|--------|----------| -------- |---------------------------------------------------------------------------------------------------------------|
+| name     | string | no       |       | the display name of our Column e.g. 'Name' |
+| selector | string | yes      |       | the properly in the data set e.g.  `property1.nested1.nested2`. When using `cell` `selector` is only required if `sortable` is true |
+| sortable | bool   | no       |       | if the column is sortable |
+| format   | func   | no       |       | format the selector e.g. `row => moment(row.timestamp).format('lll')` |
+| cell     | func   | no       |       | for ultimate control use `cell` to render your own custom component! e.g `row => <h2>{row.title}</h2>`  **Negates  `format`** |
+| width    | bool   | no       | 100px | sets a fixed width on the column |
+| grow     | bool   | no       | 1     | grow functions the same as flex-grow. All cells have grow: 1 by default, setting this to a higher number increases the amount of space your column consumes in relation to the others |
+| right    | bool   | no       | false | right aligns the content |
+| center   | bool   | no       | false | center aligns the content (takes priority over right) |
+| compact  | bool   | no       | false | removes any padding in the cell. can be useful for custom cells icons or buttons |
+| wrap     | bool   | no       | false | if the content in the column should wrap. Negated by `cell` or `mobile` |
+| allowOverflow  | bool   | no       | false | disabled overflow/wrap for a cell. this is useful if the custom cell item is a menu |
+| ignoreRowClick   | bool | no | false | implements e.stopPropagation() on a specific Table Cell. This is **really** useful when you want to trigger some action based on `onRowClicked` (e.g. Row click navigation) but you **do not** want a specific Table Cell to trigger `onRowClicked` (i.e. a `cell` action button) |
 
 
 ### DataTable Properties
@@ -91,6 +95,8 @@ Nothing new here - we are using an array of object literals and properties to de
 | customTheme | object | no |  | Override the [default theme](https://github.com/jbetancur/react-data-table-component/blob/master/src/themes/default.js), by overriding specifc props. Your changes will be merged. [See Theming](#theming) for more information |
 | disabled | bool | no | false | disables the Table section |
 | noHeader | bool | no | false | removes the table header. `title`, `contextTitle` and `contextActions` will be ignored |
+| mobile | bool | no | false | converts the table to a mobile card layout when it reaches the `mobileBreakpoint` |
+| mobileBreakpoint | string | no | 599px | customize the breakpoint where the table converts to a mobile card layout|
 
 #### Advanced Selectable Component Options
 Sometimes 3rd party checkbox components have their own way of handling indeterminate state. We don't want React Data Table hardcoded to a specific ui lib or custom component, so instead a "hook" is provided to allow you to pass a function that will be resolved by React Data Table's internal `Checkbox` for use with `indeterminate` functionality.

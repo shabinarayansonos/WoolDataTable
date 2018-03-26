@@ -2,11 +2,60 @@
 
 exports[`component <TableHead /> should render correctly 1`] = `
 .c0 {
-  text-align: left;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   background-color: transparent;
 }
 
-<thead
+<div
   className="c0"
-/>
+>
+  <TableHead__HeaderRow />
+</div>
+`;
+
+exports[`component <TableHead mobile /> should render correctly 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: transparent;
+}
+
+@media all and (max-width:600px) {
+  .c0 {
+    display: none;
+  }
+}
+
+<div
+  className="c0"
+>
+  <TableHead__HeaderRow />
+</div>
+`;
+
+exports[`component <TableHead mobile mobileBreakpoint /> should render correctly 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: transparent;
+}
+
+@media all and (max-width:900px) {
+  .c0 {
+    display: none;
+  }
+}
+
+<div
+  className="c0"
+>
+  <TableHead__HeaderRow />
+</div>
 `;

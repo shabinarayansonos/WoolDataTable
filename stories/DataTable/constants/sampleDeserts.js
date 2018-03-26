@@ -10,7 +10,7 @@ export default [
     calcium: 14,
     iron: 1,
   }, {
-    name: 'Ice cream sandwhich',
+    name: 'Ice cream sandwich',
     type: 'Ice cream',
     calories: 237,
     fat: 9.0,
@@ -99,5 +99,15 @@ export default [
     sodium: 54,
     calcium: 12,
     iron: 6,
+  }, {
+    name: 'Dulce De Leche',
+    type: 'Ice Cream',
+    calories: 160,
+    fat: 20.0,
+    carbs: 650,
+    protein: 20.0,
+    sodium: 540,
+    calcium: 120,
+    iron: 68,
   },
 ];

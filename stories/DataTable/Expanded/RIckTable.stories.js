@@ -12,13 +12,14 @@ const columns = [
     name: 'Name',
     selector: 'name',
     sortable: true,
-    cell: d => <div><div style={{ fontWeight: 700 }}>{d.name}</div>{trim(d.summary, 100)}</div>,
-    width: '100px',
+    grow: 3,
+    cell: d => <div><div style={{ fontWeight: 700 }}>{d.name}</div><span>{trim(d.summary, 100)}</span></div>,
   },
   {
     name: 'Season',
     selector: 'season',
     sortable: true,
+    right: true,
   },
   {
     name: 'Air Date',
@@ -43,5 +44,6 @@ storiesOf('React Data Table', module).add('Expansion & Custom Cells', () => (
     defaultSortField="name"
     defaultSortDirection="desc"
     expandableRowsComponent={<SampleExpandedComponent />}
+    mobile
   />
 ));

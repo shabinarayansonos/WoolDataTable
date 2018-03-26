@@ -1,43 +1,83 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import styled, { withTheme } from 'styled-components';
+import styled, { withTheme, css } from 'styled-components';
 import Checkbox from './Checkbox';
 import ExpanderButton from './ExpanderButton';
 import { getProperty } from './util';
+import { cellMixin, media } from './mixins';
 
-const TableCellStyle = styled.td`
-  box-sizing: border-box;
-  vertical-align: middle;
-  white-space: nowrap;
+const CellWrapper = styled.div`
+  ${props => props.mobile && media.mobile`
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  `}
+
+  .cell_wapper_mobile-header {
+    display: none;
+    ${props => props.mobile && media.mobile`
+      display: flex;
+      justify-content: flex-start;
+      font-weight: bold;
+      flex: 0 0 40%;
+      max-width: 40%;
+    `}
+  }
+
+  .cell_wapper_content {
+    ${props => props.mobile && media.mobile`
+      display: flex;
+      justify-content: flex-end;
+      text-align: right;
+      flex: 0 0 60%;
+      max-width: 60%;
+    `}
+  }
+`;
+
+const TableCellStyle = styled.div`
+  ${() => cellMixin};
   line-height: normal;
   font-weight: 400;
   font-size: ${props => props.theme.rows.fontSize};
   color: ${props => props.theme.rows.fontColor};
-  height: ${props => props.theme.rows.height};
-  width: ${props => props.width};
-  ${props => props.column.number && 'text-align: right'};
-  ${props => props.column.center && 'text-align: center'};
-  padding-left: calc(${props => props.theme.cells.cellPadding} / 2);
-  padding-right: calc(${props => props.theme.cells.cellPadding} / 2);
+  min-height: ${props => props.theme.rows.height};
+  white-space: ${props => (props.wrap ? 'normal' : 'nowrap')};
 
-  &:first-child {
-    padding-left: ${props => props.theme.cells.firstCellPadding};
-    ${props => props.type === 'checkbox' && 'padding-left: 8px'};
-    ${props => props.type === 'checkbox' && 'padding-right: 0'};
-    ${props => props.type === 'expander' && 'padding: 0'};
-  }
+  ${props => !props.allowOverflow && css`
+    div,
+    span,
+    p {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      min-width: 0;
+    }
+  `};
 
-  &:nth-child(2) {
-    /* when compact or expander is not first child (table is selectable) */
-    ${props => props.type === 'expander' && 'padding: 0'};
-    ${props => props.type === 'cell' && 'padding-left: 8px'};
-  }
+  ${props => props.mobile && media.mobile`
+    justify-content: flex-end;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    text-align: left;
+    white-space: normal;
+    width: 100%;
 
-  ${props => props.column.compact && 'padding: 0'};
+    &:first-child {
+      ${props.type === 'checkbox' && 'justify-content: center'};
+      ${props.type === 'expander' && 'justify-content: center'};
+    }
 
-  &:last-child {
-    padding-right: ${props => props.theme.cells.lastCellPadding};
-  }
+    &:nth-child(2) {
+      ${props.type === 'expander' && 'padding: 0'};
+      ${props.type === 'cell' && 'padding-left: 0px'};
+    }
+
+    &:nth-child(n+2) {
+      border-top: 1px solid ${props.theme.rows.borderColor};
+    }
+  `}
 `;
 
 class TableCell extends PureComponent {
@@ -45,8 +85,6 @@ class TableCell extends PureComponent {
     column: PropTypes.object,
     row: PropTypes.object,
     index: PropTypes.number,
-    width: PropTypes.string,
-    colSpan: PropTypes.number,
     type: PropTypes.oneOf(['checkbox', 'cell', 'expander']),
     checked: PropTypes.bool,
     checkboxComponent: PropTypes.oneOfType([
@@ -61,14 +99,14 @@ class TableCell extends PureComponent {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]),
+    mobile: PropTypes.bool,
+    mobileBreakpoint: PropTypes.string,
   };
 
   static defaultProps = {
     column: {},
     row: {},
     index: null,
-    width: 'auto',
-    colSpan: null,
     type: null,
     checkboxComponent: null,
     checked: false,
@@ -77,6 +115,8 @@ class TableCell extends PureComponent {
     onToggled: null,
     expanded: false,
     children: null,
+    mobile: false,
+    mobileBreakpoint: '600px',
   };
 
   handleCellClick = e => {
@@ -135,20 +175,38 @@ class TableCell extends PureComponent {
     const {
       column,
       type,
-      width,
-      colSpan,
+      mobile,
+      mobileBreakpoint,
     } = this.props;
 
     return (
       <TableCellStyle
         type={type}
-        width={width}
-        colSpan={colSpan}
-        column={column}
-        data-label={column.name}
         onClick={this.handleCellClick}
+        column={column}
+        width={column.width}
+        minWidth={column.minWidth}
+        grow={column.grow}
+        truncate={column.truncate}
+        right={column.right}
+        center={column.center}
+        compact={column.compact}
+        allowOverflow={column.allowOverflow}
+        wrap={column.wrap}
+        mobile={mobile}
+        mobileBreakpoint={mobileBreakpoint}
       >
-        {this.renderChildren()}
+        <CellWrapper
+          mobile={mobile}
+          mobileBreakpoint={mobileBreakpoint}
+        >
+          <div className="cell_wapper_mobile-header">
+            {column.name}
+          </div>
+          <div className="cell_wapper_content">
+            {this.renderChildren()}
+          </div>
+        </CellWrapper>
       </TableCellStyle>
     );
   }

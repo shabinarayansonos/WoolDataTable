@@ -23,5 +23,6 @@ storiesOf('React Data Table', module).add('Basic Selectable', () => (
     columns={columns}
     data={data}
     selectableRows
+    mobile
   />
 ));

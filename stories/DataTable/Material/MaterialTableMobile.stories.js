@@ -68,12 +68,11 @@ const columns = [
     cell: row => <CustomMaterialMenu row={row} />,
     ignoreRowClick: true,
     right: true,
-    allowOverflow: true,
   },
 ];
 
 
-class MaterialTable extends PureComponent {
+class MaterialTableMobile extends PureComponent {
   state = { selectedRows: [], clearSelected: false, data };
 
   handleChange = state => {
@@ -104,6 +103,7 @@ class MaterialTable extends PureComponent {
     return (
       <Card style={{ height: '100%' }}>
         <DataTable
+          mobile
           overflowY
           title="Desserts"
           columns={columns}
@@ -124,4 +124,4 @@ class MaterialTable extends PureComponent {
   }
 }
 
-storiesOf('React Data Table', module).add('Material (3rd Party UI Lib)', () => <MaterialTable />);
+storiesOf('React Data Table', module).add('Material (3rd Party UI Lib) Mobile', () => <MaterialTableMobile />);

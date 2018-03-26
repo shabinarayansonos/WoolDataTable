@@ -28,8 +28,6 @@ export const removeItem = (array, item) => {
 // Make sure columns have unique id's
 export const decorateColumns = columns => columns.map(column => ({ id: shortid.generate(), ...column }));
 
-export const countIfOne = item => (item ? 1 : 0);
-
 export const getSortDirection = direction => (direction ? 'asc' : 'desc');
 
 export const handleFunctionProps = (object, ...args) => {

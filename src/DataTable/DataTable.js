@@ -12,12 +12,11 @@ import TableCol from './TableCol';
 import TableCell from './TableCell';
 import ExpanderRow from './ExpanderRow';
 import TableHeader from './TableHeader';
-import TableBody from './TableBody';
 import ResponsiveWrapper from './ResponsiveWrapper';
 import ProgressWrapper from './ProgressWrapper';
 import TableWrapper from './TableWrapper';
 import NoData from './NoData';
-import { decorateColumns, insertItem, removeItem, countIfOne, getSortDirection } from './util';
+import { decorateColumns, insertItem, removeItem, getSortDirection } from './util';
 import defaultTheme from '../themes/default';
 
 class DataTable extends Component {
@@ -75,6 +74,8 @@ class DataTable extends Component {
     disabled: PropTypes.bool,
     noHeader: PropTypes.bool,
     onRowClicked: PropTypes.func,
+    mobile: PropTypes.bool,
+    mobileBreakpoint: PropTypes.string,
   };
 
   static defaultProps = {
@@ -112,6 +113,8 @@ class DataTable extends Component {
     disabled: false,
     noHeader: false,
     onRowClicked: null,
+    mobile: false,
+    mobileBreakpoint: '600px',
   };
 
   constructor(props) {
@@ -289,7 +292,6 @@ class DataTable extends Component {
           key={col.id}
           type="column"
           column={col}
-          width={col.width}
           onColumnClick={this.handleSort}
           sortable={col.sortable && sortColumn === col.selector}
           sortField={sortColumn}
@@ -299,7 +301,7 @@ class DataTable extends Component {
     );
   }
 
-  renderRows(numColumns) {
+  renderRows() {
     const {
       selectableRows,
       expandableRows,
@@ -309,6 +311,8 @@ class DataTable extends Component {
       highlightOnHover,
       keyField,
       pointerOnHover,
+      mobile,
+      mobileBreakpoint,
     } = this.props;
 
     const {
@@ -322,7 +326,6 @@ class DataTable extends Component {
           return (
             <ExpanderRow
               key={`expander--${row[keyField]}`}
-              numColumns={numColumns}
               data={getExpanderRowbByParentId(row.parent)}
             >
               {expandableRowsComponent}
@@ -341,6 +344,8 @@ class DataTable extends Component {
             index={index}
             keyField={keyField}
             onRowClicked={this.handleRowClicked}
+            mobile={mobile}
+            mobileBreakpoint={mobileBreakpoint}
           >
             {selectableRows && this.renderSelectableRows(row, index)}
             {expandableRows && this.renderExpanderCell(row, index)}
@@ -356,7 +361,6 @@ class DataTable extends Component {
 
     return (
       <TableCell
-        width="42px"
         type="expander"
         onToggled={this.toggleExpand}
         expanded={getExpanderRowParentById(identifier) > -1}
@@ -377,7 +381,6 @@ class DataTable extends Component {
     return (
       <TableCell
         type="checkbox"
-        width="42px"
         checked={isChecked}
         checkboxComponent={selectableRowsComponent}
         checkboxComponentOptions={selectableRowsComponentProps}
@@ -393,6 +396,8 @@ class DataTable extends Component {
       selectableRowsComponent,
       selectableRowsComponentProps,
       expandableRows,
+      mobile,
+      mobileBreakpoint,
     } = this.props;
 
     const {
@@ -403,31 +408,24 @@ class DataTable extends Component {
     const isIndeterminate = selectedRows.length > 0 && !allSelected;
 
     return (
-      <TableHead>
-        <tr>
-          {selectableRows &&
-            <TableCol
-              type="checkbox"
-              width="42px"
-              onClick={this.handleSelectAll}
-              checked={allSelected}
-              checkboxComponent={selectableRowsComponent}
-              checkboxComponentOptions={selectableRowsComponentProps}
-              indeterminate={isIndeterminate}
-            />}
-
-          {expandableRows && <TableCol width="42px" />}
-
-          {this.renderColumns()}
-        </tr>
+      <TableHead mobile={mobile} mobileBreakpoint={mobileBreakpoint}>
+        {selectableRows &&
+          <TableCol
+            type="checkbox"
+            onClick={this.handleSelectAll}
+            checked={allSelected}
+            checkboxComponent={selectableRowsComponent}
+            checkboxComponentOptions={selectableRowsComponentProps}
+            indeterminate={isIndeterminate}
+          />}
+        {expandableRows && <TableCol type="expander" />}
+        {this.renderColumns()}
       </TableHead>
     );
   }
 
   render() {
     const {
-      selectableRows,
-      expandableRows,
       title,
       customTheme,
       contextActions,
@@ -450,7 +448,6 @@ class DataTable extends Component {
     } = this.state;
 
     const theme = merge(defaultTheme, customTheme);
-    const numColumns = this.columns.length + countIfOne(selectableRows) + countIfOne(expandableRows);
 
     return (
       <ThemeProvider theme={theme}>
@@ -482,10 +479,7 @@ class DataTable extends Component {
             {rows.length > 0 &&
               <Table disabled={disabled}>
                 {this.renderTableHead()}
-
-                <TableBody>
-                  {this.renderRows(numColumns)}
-                </TableBody>
+                {this.renderRows()}
               </Table>}
           </TableWrapper>
         </ResponsiveWrapper>

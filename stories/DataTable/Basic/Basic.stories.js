@@ -14,7 +14,7 @@ const columns = [
     name: 'Year',
     selector: 'year',
     sortable: true,
-    number: true,
+    right: true,
   },
 ];
 
@@ -23,5 +23,6 @@ storiesOf('React Data Table', module).add('Basic', () => (
     title="Arnie Movies"
     columns={columns}
     data={data}
+    mobile
   />
 ));

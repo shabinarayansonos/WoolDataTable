@@ -3,19 +3,36 @@
 exports[`component <TableCol /> should render correctly 1`] = `
 .c0 {
   box-sizing: border-box;
-  vertical-align: middle;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-flex-flow: row nowrap;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-basis: 100px;
+  -ms-flex-preferred-size: 100px;
+  flex-basis: 100px;
+  width: 100px;
+  padding-left: calc(48px / 2);
+  padding-right: calc(48px / 2);
+  white-space: nowrap;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   font-weight: 500;
-  white-space: nowrap;
   height: 48px;
   font-size: 12px;
   color: rgba(0,0,0,.54);
-  width: auto;
-  padding-left: calc(48px / 2);
-  padding-right: calc(48px / 2);
 }
 
 .c0:first-child {
@@ -33,13 +50,11 @@ exports[`component <TableCol /> should render correctly 1`] = `
 .c0::before {
   font-size: 12px;
   padding-right: 4px;
-  padding-bottom: 5px;
 }
 
-<th
+<div
   className="c0"
   onClick={[Function]}
   type="column"
-  width="auto"
 />
 `;

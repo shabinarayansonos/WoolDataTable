@@ -3,7 +3,6 @@ import {
   insertItem,
   removeItem,
   decorateColumns,
-  countIfOne,
   getSortDirection,
   handleFunctionProps,
 } from '../util';
@@ -59,20 +58,6 @@ describe('decorateColumns', () => {
   });
 });
 
-describe('countIfOne', () => {
-  test('should return 1 if true', () => {
-    const count = countIfOne(true);
-
-    expect(count).toBe(1);
-  });
-
-  test('countIfOne should return 0 if false', () => {
-    const count = countIfOne();
-
-    expect(count).toBe(0);
-  });
-});
-
 describe('getSortDirection', () => {
   test('should return asc if true', () => {
     const direction = getSortDirection(true);
@@ -80,7 +65,7 @@ describe('getSortDirection', () => {
     expect(direction).toBe('asc');
   });
 
-  test('countIfOne should return desc if false', () => {
+  test('should return desc if false', () => {
     const direction = getSortDirection();
 
     expect(direction).toBe('desc');
