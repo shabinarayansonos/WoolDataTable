@@ -5,7 +5,7 @@ export default {
   },
   header: {
     fontSize: '12px',
-    fontColor: 'rgba(0,0,0,.54)',
+    fontColor: 'rgba(1,1,1,.54)',
     backgroundColor: 'transparent',
     height: '48px',
     contextMenu: {
